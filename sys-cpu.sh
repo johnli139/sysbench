@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUT="./sysbench-CPU.csv"
+OUT="./sysbenchCPU-$(hostname).csv"
 if [ -f "$OUT" ]; then
    rm -f $OUT
 fi
