@@ -1,11 +1,12 @@
 #!/bin/bash
 
-OUT="./sysbenchCPU-$(hostname).csv"
+OUT="./$(hostname)-ht.csv"
 if [ -f "$OUT" ]; then
    rm -f $OUT
 fi
 
-MAXTHREADS=64
+MAXTHREADS=48
+TIME=60
 echo "Date;"$(date) >> $OUT
 echo "Version;"$(sysbench --version) >> $OUT
 echo "Host;"$(hostname) >> $OUT
@@ -20,10 +21,12 @@ echo "" >> $OUT
 echo "Prime="$PRIME >> $OUT
 echo "Threads;EPS" >> $OUT
 THREADS=1
-echo $THREADS";"$(sysbench cpu --threads=$THREADS --cpu-max-prime=$PRIME run | grep "events per second" | awk -F" " '{ print $4 }') >> $OUT
+echo $THREADS";"$(sysbench cpu --threads=$THREADS --cpu-max-prime=$PRIME --time=$TIME run | grep "events per second" | awk -F" " '{ print $4 }') >> $OUT
+sleep 5
 for THREADS in `seq 4 4 $MAXTHREADS`
 do
-echo $THREADS";"$(sysbench cpu --threads=$THREADS --cpu-max-prime=$PRIME run | grep "events per second" | awk -F" " '{ print $4 }') >> $OUT
+echo $THREADS";"$(sysbench cpu --threads=$THREADS --cpu-max-prime=$PRIME --time=$TIME run | grep "events per second" | awk -F" " '{ print $4 }') >> $OUT
+sleep 5
 done
 
 PRIME=10000
@@ -31,8 +34,10 @@ echo "" >> $OUT
 echo "Prime="$PRIME >> $OUT
 echo "Threads;EPS" >> $OUT
 THREADS=1
-echo $THREADS";"$(sysbench cpu --threads=$THREADS --cpu-max-prime=$PRIME run | grep "events per second" | awk -F" " '{ print $4 }') >> $OUT
+echo $THREADS";"$(sysbench cpu --threads=$THREADS --cpu-max-prime=$PRIME --time=$TIME run | grep "events per second" | awk -F" " '{ print $4 }') >> $OUT
+sleep 5
 for THREADS in `seq 4 4 $MAXTHREADS`
 do
-echo $THREADS";"$(sysbench cpu --threads=$THREADS --cpu-max-prime=$PRIME run | grep "events per second" | awk -F" " '{ print $4 }') >> $OUT
+echo $THREADS";"$(sysbench cpu --threads=$THREADS --cpu-max-prime=$PRIME --time=$TIME run | grep "events per second" | awk -F" " '{ print $4 }') >> $OUT
+sleep 5
 done
